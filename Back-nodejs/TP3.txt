@@ -1,0 +1,65 @@
+TP3
+1-CREATE PROFILE profil_tp3
+   LIMIT
+      CONNECT_TIME 7200
+      IDLE_TIME 180
+      SESSIONS_PER_USER 2
+      FAILED_LOGIN_ATTEMPTS 1
+      PASSWORD_LOCK_TIME 5/1440;
+2-CREATE USER TP3
+   IDENTIFIED BY votre_mot_de_passe
+   DEFAULT TABLESPACE USERS
+   TEMPORARY TABLESPACE TEMP
+   QUOTA 10M ON USERS
+   PROFILE profil_tp3;
+3-SELECT profile FROM dba_users
+WHERE username = 'TP3';
+4-SELECT username from dba_users;
+5-CREAT OR REPLACE PROCEDURE list_profile IS 
+	BEGIN 
+	for i in (Select profile from dba_profilrs);
+	LOOP 
+		dbms_output.put_line(i.profile);
+	END LOOP;
+	END;
+6-CREATE OR REPLACE FUNCTION verif_password (
+    p_username IN VARCHAR2,
+    p_password IN VARCHAR2
+) RETURN BOOLEAN 
+IS
+BEGIN 
+    IF (LENGTH(p_password) >= 6) AND 
+       ((INSTR(p_password, '?') > 0) OR 
+        (INSTR(p_password, '!') > 0) OR 
+        (INSTR(p_password, '@') > 0)) AND 
+       (p_username <> p_password) THEN
+        RETURN TRUE;
+    ELSE
+        RETURN FALSE;
+    END IF;
+END;
+7-ALTER PROFILE profil_tp3 LIMIT
+  PASSWORD_VERIFY_FUNCTION verif_password;
+8-
+9-DROP PROFILE profil_tp3 CASCAD;
+---------------------------------------------------------------
+TP4
+1-CREATE ROLE ROLE_TP3;
+GRANT CREATE SESSION, CREATE TABLE, CREATE ROLE TO ROLE_TP3;
+GRANT CREATE PROCEDURE TO ROLE_TP3 WITH ADMIN OPTION;
+GRANT SELECT ON HR.Employees TO ROLE_TP3;
+GRANT SELECT ON HR.Departments TO ROLE_TP3;
+2-Grant ROLE_TP3 to TP3;
+3-CONNECT TP3/TP3;
+CREATE TABLE ETUDIANTS (
+    MATRICULE VARCHAR2(10),
+    NOM VARCHAR2(10),
+    TEL NUMBER,
+    DATENAISSANCE DATE
+);
+4-CREATE USER TP3_2 IDENTIFIED BY TP3_2 DEFAULT TABLESPACE USERS QUOTA 5M ON USERS;
+PROFILE profil_tp3;
+5-GRANT ROLE_TP3 TO TP3_2;
+6-GRANT SELECT ON TP3.Etudiants TO TP3_2;
+GRANT INSERT ON TP3.Etudiants TO TP3_2;
+7-
