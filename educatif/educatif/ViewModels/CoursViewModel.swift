@@ -11,7 +11,10 @@ import SwiftUI
 class CoursViewModel: ObservableObject {
     @Published var cours: [Cours] = []
     @Published var showFavoritesOnly: Bool = false
-
+    @Published var searchText: String = ""
+    @Published var isCoursFound = true
+    @Published var errorMessage: String?
+    
     // Function to toggle the favorites filter
     func toggleFavoritesOnly() {
         showFavoritesOnly.toggle()
@@ -22,7 +25,7 @@ class CoursViewModel: ObservableObject {
     // Function to load courses from the server
     func loadCours() {
         var url: URL
-
+        print("sarra")
         if showFavoritesOnly {
             // Load only favorite courses
             url = URL(string: "\(AppConfig.apiUrl)/api/cours/favorites")!
@@ -30,20 +33,20 @@ class CoursViewModel: ObservableObject {
             // Load all courses
             url = URL(string: "\(AppConfig.apiUrl)/api/cours")!
         }
-
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            if let data = data {
+        
+        let session = URLSession.shared
+        session.dataTask(with: url) { data, response, error in
+            let httpResponse = response as! HTTPURLResponse
+            print(httpResponse.statusCode)
                 do {
-                    let decodedData = try JSONDecoder().decode([Cours].self, from: data)
+                    let decodedData = try JSONDecoder().decode([Cours].self, from: data!)
                     DispatchQueue.main.async {
                         self.cours = decodedData
                     }
                 } catch {
                     print("Error decoding cours: \(error)")
                 }
-            } else if let error = error {
-                print("Error fetching cours: \(error.localizedDescription)")
-            }
+            
         }.resume()
     }
 
@@ -168,5 +171,20 @@ class CoursViewModel: ObservableObject {
                 }
             }
         }.resume()
+    }
+    func performSearch() {
+        let filteredCours = self.filteredCours()
+        isCoursFound = !filteredCours.isEmpty
+        if !isCoursFound {
+            errorMessage = "Aucun cours trouvé."
+        }
+    }
+
+    func filteredCours() -> [Cours] {
+        if searchText.isEmpty {
+            return showFavoritesOnly ? cours.filter { $0.favori } : cours
+        } else {
+            return cours.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+        }
     }
 }

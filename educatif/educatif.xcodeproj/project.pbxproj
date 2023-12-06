@@ -24,6 +24,9 @@
 		58C672EF2B17466B000326C5 /* AddCoursView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C672EE2B17466B000326C5 /* AddCoursView.swift */; };
 		58C672F12B174E79000326C5 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C672F02B174E79000326C5 /* Color.swift */; };
 		58C672F32B17767C000326C5 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C672F22B17767C000326C5 /* View.swift */; };
+		58D13B782B1F599F009FBBB5 /* Quiz1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D13B772B1F599F009FBBB5 /* Quiz1.swift */; };
+		58D13B7B2B1F5C04009FBBB5 /* RemoteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D13B7A2B1F5C04009FBBB5 /* RemoteImageView.swift */; };
+		58D38FEA2B18AD1A00BB7154 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D38FE92B18AD1A00BB7154 /* SearchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +49,9 @@
 		58C672EE2B17466B000326C5 /* AddCoursView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCoursView.swift; sourceTree = "<group>"; };
 		58C672F02B174E79000326C5 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		58C672F22B17767C000326C5 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		58D13B772B1F599F009FBBB5 /* Quiz1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quiz1.swift; sourceTree = "<group>"; };
+		58D13B7A2B1F5C04009FBBB5 /* RemoteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
+		58D38FE92B18AD1A00BB7154 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +94,7 @@
 				5806FC392B14BBE200E62F3E /* Preview Content */,
 				58C672F02B174E79000326C5 /* Color.swift */,
 				58C672F22B17767C000326C5 /* View.swift */,
+				58D13B7A2B1F5C04009FBBB5 /* RemoteImageView.swift */,
 			);
 			path = educatif;
 			sourceTree = "<group>";
@@ -120,6 +127,7 @@
 				58A489F62B14DB030012905B /* HomeView.swift */,
 				58C672EC2B1737A4000326C5 /* QuizView.swift */,
 				58C672EE2B17466B000326C5 /* AddCoursView.swift */,
+				58D38FE92B18AD1A00BB7154 /* SearchView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -128,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				58A489F02B14D1510012905B /* Cours.swift */,
+				58D13B772B1F599F009FBBB5 /* Quiz1.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -210,14 +219,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58D13B782B1F599F009FBBB5 /* Quiz1.swift in Sources */,
 				5806FC352B14BBE100E62F3E /* CoursTabView.swift in Sources */,
 				58C672E92B173052000326C5 /* AppConfig.swift in Sources */,
 				58C672F32B17767C000326C5 /* View.swift in Sources */,
 				58A489F92B14DB360012905B /* EventView.swift in Sources */,
 				58A489F52B14D6900012905B /* CoursListView.swift in Sources */,
 				5806FC332B14BBE100E62F3E /* educatifApp.swift in Sources */,
+				58D38FEA2B18AD1A00BB7154 /* SearchView.swift in Sources */,
 				58C672ED2B1737A4000326C5 /* QuizView.swift in Sources */,
 				58A489FD2B14E1510012905B /* CourDetails.swift in Sources */,
+				58D13B7B2B1F5C04009FBBB5 /* RemoteImageView.swift in Sources */,
 				58A489F72B14DB030012905B /* HomeView.swift in Sources */,
 				58C672EF2B17466B000326C5 /* AddCoursView.swift in Sources */,
 				58C672F12B174E79000326C5 /* Color.swift in Sources */,

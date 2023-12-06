@@ -12,9 +12,11 @@ struct CoursRow: View {
     let cours: Cours
     @ObservedObject var viewModel: CoursViewModel
 
+    @State private var tapCount: Int = 0
+
     var body: some View {
         HStack {
-            remoteImage(url: cours.titleImage, placeholder: "photo")
+            RemoteImageView(url: cours.titleImage)
                 .frame(width: 80, height: 80)
                 .cornerRadius(10)
 
@@ -22,19 +24,16 @@ struct CoursRow: View {
                 Text(cours.title)
                     .font(.headline)
                     .foregroundColor(Color(hex: "#00574B"))
-
-                Text(cours.header)
-                    .font(.subheadline)
-                    .foregroundColor(Color(hex: "#00574B"))
             }
 
             Spacer()
 
             Button(action: {
+                tapCount += 1
                 viewModel.toggleFavorite(for: cours)
             }) {
-                Image(systemName: cours.favori ? "heart.fill" : "heart")
-                    .foregroundColor(cours.favori ? Color.red : Color.gray)
+                Image(systemName: "heart.fill")
+                    .foregroundColor(tapCount % 2 == 1 ? Color.red : Color.gray)
             }
         }
         .padding()
@@ -43,6 +42,7 @@ struct CoursRow: View {
         .shadow(radius: 5)
         .padding(.vertical, 5)
     }
+
     struct CoursRow_Previews: PreviewProvider {
         static var previews: some View {
             let sampleCours = Cours(
@@ -57,7 +57,7 @@ struct CoursRow: View {
             viewModel.cours = [sampleCours]
 
             return CoursRow(cours: sampleCours, viewModel: viewModel)
-                .previewLayout(.fixed(width: 300, height: 100)) // Adjust the size as needed
+                .previewLayout(.fixed(width: 300, height: 100))
                 .padding()
         }
     }

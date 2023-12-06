@@ -5,7 +5,6 @@
 //  Created by sarrabs on 27/11/2023.
 //
 
-// CourDetails.swift
 import SwiftUI
 
 struct CourDetails: View {
@@ -39,94 +38,74 @@ struct CourDetails: View {
 
                     Spacer()
 
-                    VStack {
+                    VStack(alignment: .center, spacing: 20) {
+                        RemoteImageView(url: updatedCours.titleImage)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 200, height: 200)
+                            .cornerRadius(10)
+                            .padding()
+
                         Text(updatedCours.title)
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(Color(hex: "#00574B"))
                             .padding()
 
-                        remoteImage(url: updatedCours.titleImage, placeholder: "photo")
-                            .padding()
+                        Text(updatedCours.header)
+                            .foregroundColor(Color(hex: "#00574B"))
+                            .padding(.bottom)
 
-                        VStack(alignment: .leading, spacing: 20) { // Increase spacing here
-                            Text(updatedCours.header)
-                                .foregroundColor(Color(hex: "#00574B"))
-                                .padding(.bottom)
+                        Spacer()
 
-                            Spacer()
-
+                        Button(action: {
+                            isShowingQuiz.toggle()
+                        }) {
                             HStack {
-                                Button(action: {
-                                    isShowingQuiz.toggle()
-                                }) {
-                                    Image(systemName: "book")
-                                        .font(.title)
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .background(Color(hex: "#00574B"))
-                                        .cornerRadius(10)
-                                }
-                                .sheet(isPresented: $isShowingQuiz) {
-                                    QuizView(cours: updatedCours)
-                                }
-
-                                Spacer()
-
-                                Button(action: {
-                                    // Handle update action
-                                }) {
-                                    Image(systemName: "pencil")
-                                        .font(.title)
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .background(Color(hex: "#00574B"))
-                                        .cornerRadius(10)
-                                }
-
-                                Spacer()
-
-                                Button(action: {
-                                    // Handle delete action
-                                }) {
-                                    Image(systemName: "trash")
-                                        .font(.title)
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .background(Color(hex: "#00574B"))
-                                        .cornerRadius(10)
-                                }
+                                Image(systemName: "book")
+                                    .font(.title)
+                                Text("Démarrer le Quiz")
                             }
+                            .foregroundColor(.white)
                             .padding()
+                            .background(Color(hex: "#00574B"))
+                            .cornerRadius(10)
+                        }
+                        .sheet(isPresented: $isShowingQuiz) {
+                            QuizView()
+                        }
+
+                        Button(action: {
+                            viewModel.toggleFavorite(for: updatedCours)
+                        }) {
+                            Image(systemName: updatedCours.favori ? "heart.fill" : "heart")
+                                .foregroundColor(updatedCours.favori ? Color.red : .white)
                         }
                         .padding()
-                        .background(Color.white)
-                        .cornerRadius(15)
-                        .shadow(radius: 5)
                     }
                     .padding()
-                    .background(Color.clear)
-                    .edgesIgnoringSafeArea(.top)
+                    .background(Color.white)
+                    .cornerRadius(15)
+                    .shadow(radius: 5)
                 }
             }
             .navigationTitle("")
             .navigationBarHidden(true)
-            .navigationBarBackButtonHidden(true) // Hide the default back button
+            .navigationBarBackButtonHidden(true)
 
-            // Add a custom back button with action
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        // Handle custom back action
-                        // For example, you can use NavigationLink to navigate back.
-                    }) {
+                    NavigationLink(destination: EmptyView()) {
                         Image(systemName: "chevron.left")
                             .foregroundColor(.white)
                     }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        // Action personnalisée lors du retour
+                    })
                 }
             }
         }
     }
+
     // CourDetails_Previews
     struct CourDetails_Previews: PreviewProvider {
         static var previews: some View {
@@ -144,7 +123,7 @@ struct CourDetails: View {
             return NavigationView {
                 CourDetails(cours: sampleCours, viewModel: viewModel)
             }
-            .previewDevice("iPhone 12") // Adjust the device preview as needed
+            .previewDevice("iPhone 14 Pro")
         }
     }
 }

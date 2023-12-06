@@ -14,24 +14,50 @@ struct CoursListView: View {
     var body: some View {
         NavigationView {
             VStack {
-                GeometryReader { geometry in
-                    Path { path in
-                        let width = geometry.size.width
-                        let _ = geometry.size.height
+                Rectangle()
+                    .foregroundColor(Color(red: 0.55, green: 0.76, blue: 0.29))
+                    .frame(width: 517, height: 215)
+                    .cornerRadius(517)
+                    .ignoresSafeArea(edges: .top)
 
-                        let radius = width * 0.5
+                HStack {
+                    TextField("Search by course title", text: $viewModel.searchText)
+                        .padding()
+                        .background(Color.yellow)
+                        .cornerRadius(10)
+                        .foregroundColor(.white)
 
-                        path.addArc(center: CGPoint(x: width * 0.5, y: radius), radius: radius, startAngle: .degrees(0), endAngle: .degrees(180), clockwise: true)
+                    Button(action: {
+                        // Perform search when the "Search" button is pressed
+                        viewModel.performSearch()
+                    }) {
+                        Image(systemName: "magnifyingglass")
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(Color.yellow)
+                            .cornerRadius(90)
                     }
-                    .fill(Color(hex: "8BC34A"))
-                    .edgesIgnoringSafeArea(.top)
-                    .rotationEffect(.degrees(180))
+                    .padding()
                 }
-                .frame(height: 100)
 
-                List(viewModel.cours) { cours in
-                    NavigationLink(destination: CourDetails(cours: cours, viewModel: viewModel)) {
-                        CoursRow(cours: cours, viewModel: viewModel)
+                List {
+                    if viewModel.showFavoritesOnly {
+                        if viewModel.filteredCours().isEmpty {
+                            Text("Y'a pas encore des cours préférés.")
+                                .foregroundColor(.gray)
+                        } else {
+                            ForEach(viewModel.filteredCours()) { cours in
+                                NavigationLink(destination: CourDetails(cours: cours, viewModel: viewModel)) {
+                                    CoursRow(cours: cours, viewModel: viewModel)
+                                }
+                            }
+                        }
+                    } else {
+                        ForEach(viewModel.filteredCours()) { cours in
+                            NavigationLink(destination: CourDetails(cours: cours, viewModel: viewModel)) {
+                                CoursRow(cours: cours, viewModel: viewModel)
+                            }
+                        }
                     }
                 }
                 .navigationTitle("Cours")
@@ -49,34 +75,44 @@ struct CoursListView: View {
                             Image(systemName: "arrow.clockwise")
                                 .foregroundColor(Color(hex: "#00574B"))
                         }
-                        NavigationLink(destination: AddCoursView(viewModel: viewModel)) {
-                            Image(systemName: "plus")
-                                .foregroundColor(Color(hex: "#00574B"))
-                        }
                     }
                 )
                 .navigationBarTitleDisplayMode(.inline)
                 .onAppear {
                     viewModel.loadCours()
                 }
+
+                if !viewModel.isCoursFound {
+                    Text(viewModel.errorMessage ?? "Aucun cours trouvé.")
+                        .foregroundColor(.red)
+                        .onAppear {
+                            // Show error message for a few seconds
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                viewModel.errorMessage = nil
+                                viewModel.isCoursFound = true
+                            }
+                        }
+                }
             }
         }
     }
-    struct CoursListView_Previews: PreviewProvider {
-        static var previews: some View {
-            let viewModel = CoursViewModel()
-            let sampleCours = Cours(
-                id: "sampleId",
-                titleImage: "sampleImageUrl",
-                title: "Sample Title",
-                header: "Sample Header",
-                favori: false
-            )
+}
 
-            viewModel.cours = [sampleCours]
+struct CoursListView_Previews: PreviewProvider {
+    static var previews: some View {
+        let viewModel = CoursViewModel()
+        let sampleCours = Cours(
+            id: "sampleId",
+            titleImage: "sampleImageUrl",
+            title: "Sample Title",
+            header: "Sample Header",
+            favori: false
+        )
 
-            return CoursListView(viewModel: viewModel)
-                .previewDevice("iPhone 14 Pro") // Adjust the device as needed
-        }
+        viewModel.cours = [sampleCours]
+
+        return CoursListView(viewModel: viewModel)
+            .previewDevice("iPhone 14 Pro")
     }
 }
+
